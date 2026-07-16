@@ -131,10 +131,26 @@ export default function App() {
   };
 
   const skipExercise = () => {
-    clearInterval(intervalRef.current);
-    if (phase === 'paused') wasPausedRef.current = false;
-    // Si estem a l'últim exercici, acabar
+    // Si estàvem en pausa, cal reiniciar el timer
+    if (phase === 'paused') {
+      wasPausedRef.current = false;
+      // Si estem a l'últim exercici, acabar
+      if (idxRef.current >= EXERCISES.length - 1) {
+        setPhase('done');
+        beep(660, 600, 'sine');
+        return;
+      }
+      const next = idxRef.current + 1;
+      idxRef.current = next;
+      setIdx(next);
+      setTimeLeft(EXERCISES[next].duration);
+      beepNext(EXERCISES[next]);
+      setPhase('running');
+      return;
+    }
+    // En running: no toquem l'interval, només avancem l'exercici
     if (idxRef.current >= EXERCISES.length - 1) {
+      clearInterval(intervalRef.current);
       setPhase('done');
       beep(660, 600, 'sine');
       return;
@@ -143,17 +159,19 @@ export default function App() {
     idxRef.current = next;
     setIdx(next);
     setTimeLeft(EXERCISES[next].duration);
-    // Beep
-    if (EXERCISES[next].type === 'rest') {
+    beepNext(EXERCISES[next]);
+  };
+
+  function beepNext(ex) {
+    if (ex.type === 'rest') {
       beep(330, 200, 'triangle');
-    } else if (EXERCISES[next].type === 'work' || EXERCISES[next].type === 'warmup') {
+    } else if (ex.type === 'work' || ex.type === 'warmup') {
       beep(660, 150, 'sine');
       setTimeout(() => beep(880, 150, 'sine'), 200);
     } else {
       beep(440, 300, 'sine');
     }
-    if (phase === 'paused') setPhase('running');
-  };
+  }
 
   const finishEarly = () => {
     clearInterval(intervalRef.current);
