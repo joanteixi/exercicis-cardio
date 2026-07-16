@@ -222,7 +222,15 @@ export default function App() {
         </div>
 
         {/* Nom exercici */}
-        <h2 className="exercise-name">{exercise.name}</h2>
+        <h2 className="exercise-name">
+          <span className="exercise-icon">{exercise.icon}</span>
+          {exercise.name.replace(/^Ronda \d+: /, '')}
+        </h2>
+
+        {/* Descripció */}
+        {exercise.desc && (
+          <p className="exercise-desc">{exercise.desc}</p>
+        )}
 
         {/* Comptador */}
         <div className="timer" style={{ color: COLORS[exercise.type] }}>
