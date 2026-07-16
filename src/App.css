@@ -191,15 +191,28 @@
   border-color: #ef4444;
 }
 
+.btn-skip {
+  background: #2a2a2a;
+  color: #f59e0b;
+  border: 1px solid #3a3a3a;
+}
+
+.btn-skip:hover {
+  background: #1a1a00;
+  border-color: #f59e0b;
+}
+
 /* === Controls (pausa/aturar) === */
 .controls {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .controls .btn {
   flex: 1;
+  min-width: 0;
 }
 
 /* === Punts de progrés === */
